@@ -81,7 +81,7 @@ public abstract class AbstractEditableTableCell<S, T> extends TableCell<S, T> {
                     cancelEdit();
                 } else if (keyPressed(event, TAB)) {
                     commitHelper(false);
-                    TableColumn nextColumn = getNextTableColumn(!event.isShiftDown());
+                    TableColumn<S, ?> nextColumn = getNextTableColumn(!event.isShiftDown());
                     if (nextColumn != null) {
                         getTableView().edit(getTableRow().getIndex(), nextColumn);
                     }
@@ -98,7 +98,7 @@ public abstract class AbstractEditableTableCell<S, T> extends TableCell<S, T> {
         });
     }
 
-    private TableColumn getNextTableColumn(boolean forward) {
+    private TableColumn<S, ?> getNextTableColumn(boolean forward) {
         List<TableColumn<S, ?>> columns = new ArrayList<TableColumn<S, ?>>();
         for (TableColumn<S, ?> column : getTableView().getColumns()) {
             columns.addAll(getLeaves(column));
@@ -106,8 +106,7 @@ public abstract class AbstractEditableTableCell<S, T> extends TableCell<S, T> {
         if (columns.size() < 2) {
             return null;
         }
-        int currentIndex = columns.indexOf(getTableColumn());
-        int nextIndex = currentIndex;
+        int nextIndex = columns.indexOf(getTableColumn());
         if (forward) {
             nextIndex ++;
             if (nextIndex > columns.size() - 1) {
